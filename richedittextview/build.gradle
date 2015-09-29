@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'richedittextview'
+
+    publishedGroupId = 'com.earlyeast'
+    libraryName = 'richedittextview'
+    artifact = 'rich-edittext-view'
+
+    libraryDescription = ''
+
+    siteUrl = 'https://github.com/eastearly/RichEditText'
+    gitUrl = 'https://github.com/eastearly/RichEditText.git'
+
+    libraryVersion = '0.1.0'
+
+    developerId = 'nuuneoi'
+    developerName = 'Chen Xiaodong'
+    developerEmail = 'xiaodong666@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+android {
+    compileSdkVersion 22
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        minSdkVersion 16
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+
+}
+

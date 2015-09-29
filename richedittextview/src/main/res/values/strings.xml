@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RichEditTextView</string>
+    <string name="initial_http_toggle_switcher_alpha">0.7</string>
+    <string name="url_entry_title">Enter the URL to hyperlink</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+</resources>

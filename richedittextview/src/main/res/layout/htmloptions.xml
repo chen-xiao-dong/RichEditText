@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/html_options"
+    >
+    <LinearLayout
+
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+
+        android:background="@android:color/white">
+        <ImageView
+
+            android:id="@+id/makeBold"
+
+            android:layout_width="0dp"
+
+            android:layout_weight="1"
+
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+
+            android:src="@drawable/ic_bold" />
+
+
+
+        <ImageView
+
+            android:id="@+id/makeItalic"
+
+            android:layout_width="0dp"
+
+            android:layout_weight="1"
+
+            android:layout_height="wrap_content"
+
+            android:alpha= "@string/initial_http_toggle_switcher_alpha"
+
+            android:src="@drawable/ic_italic" />
+
+
+
+        <ImageView
+
+            android:id="@+id/makeUnderline"
+
+            android:layout_width="0dp"
+
+            android:layout_weight="1"
+
+            android:layout_height="wrap_content"
+
+            android:alpha= "@string/initial_http_toggle_switcher_alpha"
+
+            android:src="@drawable/ic_underline"
+            />
+        <ImageView
+
+            android:id="@+id/makeHyperlink"
+
+            android:layout_width="0dp"
+
+            android:layout_weight="1"
+
+            android:layout_height="wrap_content"
+
+            android:src="@drawable/ic_hyperlink" />
+        <TextView
+
+            android:id="@+id/makeForeground"
+
+            android:layout_width="0dp"
+
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+
+            android:background="@color/lightgray"
+
+            android:gravity="center_horizontal"
+
+            android:text="A"
+
+            android:textAlignment="center"
+
+            android:textAppearance="?android:attr/textAppearanceLarge"
+
+            android:textColor="@color/message_view_header_color" />
+
+
+
+    </LinearLayout>
+
+    <View
+
+        android:layout_height="1dp"
+
+        android:layout_width="match_parent"
+
+        android:background="@color/divider_color"
+
+        />
+</LinearLayout>
