@@ -6,6 +6,7 @@ import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableStringBuilder;
@@ -33,6 +34,8 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
 
     private final float initialAlpha = 0.7f;
     private Context _context;
+    private String textContent;
+    private int textColor;
     private EditText mMessageContentView;
     private LinearLayout mHtmloptions;
     private ImageButton mImageButton;
@@ -47,6 +50,10 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
     public RichEditTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         _context = context;
+        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.RichEditTextView);
+        textColor = (a.getColor(R.styleable.RichEditTextView_text_color,Color.BLACK));
+        textContent = a.getString(R.styleable.RichEditTextView_text);
+        a.recycle();
         initView();
     }
 
@@ -68,47 +75,55 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
         findViewById(R.id.makeForeground).setOnClickListener(this);
         findViewById(R.id.makeHyperlink).setOnClickListener(this);
         mMessageContentView.setOnClickListener(this);
+        mMessageContentView.setTextColor(textColor);
+        mMessageContentView.setText(textContent);
         mHtmloptions = (LinearLayout)findViewById(R.id.rich_toolbar);
         mImageButton = (ImageButton)findViewById(R.id.list_toggle);
         mImageButton.setOnClickListener(this);
         setOnClickListener(this);
+
+
     }
     @Override
     public void onClick(View view) {
-        getHtmloptionToolButton();
-        final int start = mMessageContentView.getSelectionStart();
-        final int end = mMessageContentView.getSelectionEnd();
+
         if (mSS == null) {
             mSS = new SpannableStringBuilder(mMessageContentView.getText());
         } else {
             mSS = new SpannableStringBuilder(mMessageContentView.getText());
         }
-        int i1 = view.getId();
-        if (i1 == R.id.body_text) {
+        //refresh tool bar status
+        getHtmloptionToolButton();
+
+        final int start = mMessageContentView.getSelectionStart();
+        final int end = mMessageContentView.getSelectionEnd();
+
+        int viewId = view.getId();
+        if (viewId == R.id.body_text) {
             this.refreshHtmloptionBar();
         }
 
         CharacterStyle span = null;
-        int i = view.getId();
-        if (i == R.id.makeBold) {
+
+        if (viewId == R.id.makeBold) {
             if (toggleImageView((ImageView) view))
                 span = new StyleSpan(Typeface.BOLD);
             else
                 disableStyleSpan(start, end, Typeface.BOLD);
 
-        } else if (i == R.id.makeItalic) {
+        } else if (viewId == R.id.makeItalic) {
             if (toggleImageView((ImageView) view))
                 span = new StyleSpan(Typeface.ITALIC);
             else
                 disableStyleSpan(start, end, Typeface.ITALIC);
 
-        } else if (i == R.id.makeUnderline) {
+        } else if (viewId == R.id.makeUnderline) {
             if (toggleImageView((ImageView) view))
                 span = new UnderlineSpan();
             else
                 disableSpan(start, end, UnderlineSpan.class);
 
-        } else if (i == R.id.makeForeground && start!=end) {
+        } else if (viewId == R.id.makeForeground && start!=end) {
             new ColorPickerDialog(_context, new ColorPickerDialog.OnColorChangedListener() {
                 @Override
                 public void colorChanged(int color) {
@@ -120,7 +135,7 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
 
             }, Color.BLACK).show();
 
-        } else if (i == R.id.makeHyperlink && start!= end) {
+        } else if (viewId == R.id.makeHyperlink && start!= end) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(_context);
             final EditText urlText = new EditText(_context);
@@ -147,7 +162,7 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
             builder.create().show();
 
         }
-        else if( i == R.id.list_toggle){
+        else if( viewId == R.id.list_toggle){
             if(!mToolbarClosed){
                 mToolbarClosed = !mToolbarClosed;
                 mImageButton.setBackground(getResources().getDrawable(R.drawable.ic_keyboard_arrow_left_black_24dp));
