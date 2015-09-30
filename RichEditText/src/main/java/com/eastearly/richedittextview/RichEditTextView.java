@@ -1,10 +1,11 @@
 package com.eastearly.richedittextview;
 
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.SpannableStringBuilder;
@@ -15,12 +16,15 @@ import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
+import android.util.Log;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 /**
  * Created by dachen on 9/28/15.
@@ -30,7 +34,12 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
     private final float initialAlpha = 0.7f;
     private Context _context;
     private EditText mMessageContentView;
+    private LinearLayout mHtmloptions;
+    private ImageButton mImageButton;
     private SpannableStringBuilder mSS;
+    private boolean mToolbarClosed = false;
+    private final static String Tag = "RichEditTextView";
+
     public RichEditTextView(Context context) {
         super(context);
     }
@@ -58,6 +67,9 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
         //findViewById(R.id.makeBackground).setOnClickListener(this);
         findViewById(R.id.makeForeground).setOnClickListener(this);
         findViewById(R.id.makeHyperlink).setOnClickListener(this);
+        mHtmloptions = (LinearLayout)findViewById(R.id.rich_toolbar);
+        mImageButton = (ImageButton)findViewById(R.id.list_toggle);
+        mImageButton.setOnClickListener(this);
         setOnClickListener(this);
     }
     @Override
@@ -132,6 +144,34 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
                     });
             builder.create().show();
 
+        }
+        else if( i == R.id.list_toggle){
+            if(!mToolbarClosed){
+                mToolbarClosed = !mToolbarClosed;
+                mImageButton.setBackground(getResources().getDrawable(R.drawable.ic_keyboard_arrow_left_black_24dp));
+                AnimatorSet set = new AnimatorSet();
+                set.playTogether(
+                        ObjectAnimator.ofFloat(mHtmloptions, "translationX", mHtmloptions.getMeasuredWidth()),
+                        ObjectAnimator.ofFloat(mHtmloptions, "alpha", 1, 0)
+                );
+                set.start();
+
+
+
+            }
+
+            else
+            {
+                mToolbarClosed = !mToolbarClosed;
+                mImageButton.setBackground(getResources().getDrawable(R.drawable.ic_keyboard_arrow_right_black_24dp));
+                ObjectAnimator objectAnimator = new ObjectAnimator();
+                AnimatorSet set = new AnimatorSet();
+                set.playTogether(
+                        ObjectAnimator.ofFloat(mHtmloptions, "translationX", 0),
+                        ObjectAnimator.ofFloat(mHtmloptions, "alpha", 0, 1)
+                );
+                set.start();
+            }
         }
         if (span != null) {
 

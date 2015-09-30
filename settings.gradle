@@ -1,1 +1,1 @@
-include ':demo', ':richedittextview'
+include ':demo', ':RichEditText'

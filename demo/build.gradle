@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
-
+repositories {
+    maven {
+        url 'https://dl.bintray.com/xiaodong666/maven/'
+    }
+}
 android {
     compileSdkVersion 22
     buildToolsVersion "23.0.1"
@@ -24,5 +28,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
-    compile project(':richedittextview')
+    //releaseCompile 'com.earlyeast.android:richedittextview:0.1.0'
+    compile project(':RichEditText')
+
 }

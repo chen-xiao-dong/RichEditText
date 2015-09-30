@@ -1,20 +1,20 @@
 apply plugin: 'com.android.library'
 ext {
     bintrayRepo = 'maven'
-    bintrayName = 'richedittextview'
+    bintrayName = 'dach-richedit-android'
 
-    publishedGroupId = 'com.earlyeast'
-    libraryName = 'richedittextview'
-    artifact = 'rich-edittext-view'
+    publishedGroupId = 'com.earlyeast.android'
+    libraryName = 'dach-richedit'
+    artifact = 'richedit'
 
     libraryDescription = ''
 
     siteUrl = 'https://github.com/eastearly/RichEditText'
     gitUrl = 'https://github.com/eastearly/RichEditText.git'
 
-    libraryVersion = '0.1.0'
+    libraryVersion = '0.1.1'
 
-    developerId = 'nuuneoi'
+    developerId = 'eastearly'
     developerName = 'Chen Xiaodong'
     developerEmail = 'xiaodong666@gmail.com'
 
@@ -47,3 +47,5 @@ dependencies {
 
 }
 
+apply from: '../installv1.gradle'
+apply from: '../bintrayv1.gradle'
