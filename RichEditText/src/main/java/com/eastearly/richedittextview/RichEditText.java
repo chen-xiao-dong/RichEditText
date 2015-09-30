@@ -31,20 +31,19 @@ import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 /**
  * Created by dachen on 9/28/15.
  */
-public class RichEditTextView extends LinearLayout implements View.OnClickListener{
+public class RichEditText extends LinearLayout implements View.OnClickListener{
 
     private final float initialAlpha = 0.7f;
     private Context _context;
@@ -56,30 +55,65 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
     private SpannableStringBuilder mSS;
     private boolean mToolbarClosed = false;
     private final static String Tag = "RichEditTextView";
-
-    public RichEditTextView(Context context) {
+    private EditText _editText;
+    public RichEditText(Context context) {
         super(context);
     }
 
-    public RichEditTextView(Context context, AttributeSet attrs) {
+    public RichEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         _context = context;
-        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.RichEditTextView);
-        textColor = (a.getColor(R.styleable.RichEditTextView_text_color,Color.BLACK));
-        textContent = a.getString(R.styleable.RichEditTextView_text);
+        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.RichEditText);
+        textColor = (a.getColor(R.styleable.RichEditText_text_color,Color.BLACK));
+        textContent = a.getString(R.styleable.RichEditText_text);
         a.recycle();
-        initView();
+        //initView();
+        setupView(context,attrs,0);
     }
 
-    public RichEditTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RichEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         initView();
     }
+    //Test to add a relativelayout programtically
+    private void setupView(Context context, AttributeSet attrs, int defStyleAttr){
+        RelativeLayout relativeLayout = new RelativeLayout(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
+                LayoutParams.MATCH_PARENT);
 
+        EditText editText = new EditText(context,attrs);
+
+        editText.setId(1001);
+
+        View htmlOptions = inflate(context,R.layout.htmloptions,null);
+        RelativeLayout.LayoutParams htmlOptionsLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        htmlOptionsLayoutParams.addRule(RelativeLayout.BELOW,1001);
+        htmlOptionsLayoutParams.setMargins(0,16,0,0);
+        htmlOptions.setLayoutParams(htmlOptionsLayoutParams);
+        relativeLayout.setLayoutParams(params);
+        relativeLayout.addView(editText);
+        relativeLayout.addView(htmlOptions);
+        addView(relativeLayout);
+
+        mMessageContentView = editText;
+        findViewById(R.id.makeBold).setOnClickListener(this);
+        findViewById(R.id.makeItalic).setOnClickListener(this);
+        findViewById(R.id.makeUnderline).setOnClickListener(this);
+        //findViewById(R.id.makeBackground).setOnClickListener(this);
+        findViewById(R.id.makeForeground).setOnClickListener(this);
+        findViewById(R.id.makeHyperlink).setOnClickListener(this);
+        mMessageContentView.setOnClickListener(this);
+        mHtmloptions = (LinearLayout)findViewById(R.id.rich_toolbar);
+        mImageButton = (ImageButton)findViewById(R.id.list_toggle);
+        mImageButton.setOnClickListener(this);
+        setOnClickListener(this);
+
+    }
 
     private void initView(){
         View view = inflate(getContext(), R.layout.richedittext, null);
+
         mMessageContentView = (EditText)view.findViewById(R.id.body_text);
         addView(view);
         findViewById(R.id.makeBold).setOnClickListener(this);

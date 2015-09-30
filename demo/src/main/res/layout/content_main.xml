@@ -10,8 +10,14 @@
     tools:context=".MainActivity">
 
     <TextView android:text="Please input a rich text:" android:layout_width="wrap_content"
+        android:id="@+id/prompt_title"
+        android:layout_marginBottom="16dp"
         android:layout_height="wrap_content" />
-    <com.eastearly.richedittextview.RichEditTextView
-        android:layout_width="match_parent"
+    <com.eastearly.richedittextview.RichEditText
+        android:layout_below="@+id/prompt_title"
+        android:layout_width="256dp"
+        android:typeface="monospace"
+        android:text="The quick brown fox jumped over the lazy fox."
         android:layout_height="match_parent"/>
+
 </RelativeLayout>
