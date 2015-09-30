@@ -67,6 +67,7 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
         //findViewById(R.id.makeBackground).setOnClickListener(this);
         findViewById(R.id.makeForeground).setOnClickListener(this);
         findViewById(R.id.makeHyperlink).setOnClickListener(this);
+        mMessageContentView.setOnClickListener(this);
         mHtmloptions = (LinearLayout)findViewById(R.id.rich_toolbar);
         mImageButton = (ImageButton)findViewById(R.id.list_toggle);
         mImageButton.setOnClickListener(this);
@@ -74,6 +75,7 @@ public class RichEditTextView extends LinearLayout implements View.OnClickListen
     }
     @Override
     public void onClick(View view) {
+        getHtmloptionToolButton();
         final int start = mMessageContentView.getSelectionStart();
         final int end = mMessageContentView.getSelectionEnd();
         if (mSS == null) {
