@@ -60,25 +60,30 @@
             android:layout_height="match_parent"
 
             android:src="@drawable/ic_hyperlink" />
-        <TextView
-
+        <ImageView
             android:id="@+id/makeForeground"
-
             android:layout_width="24dp"
-
             android:layout_height="match_parent"
+            android:src="@drawable/ic_format_color_text_black_24dp"/>
+        <!--<TextView-->
 
-            android:background="@color/lightgray"
+            <!--android:id="@+id/makeForeground"-->
 
-            android:gravity="center_horizontal"
+            <!--android:layout_width="24dp"-->
 
-            android:text="A"
+            <!--android:layout_height="match_parent"-->
 
-            android:textAlignment="center"
+            <!--android:background="@color/lightgray"-->
 
-            android:textAppearance="?android:attr/textAppearanceLarge"
+            <!--android:gravity="center_horizontal|center_vertical"-->
 
-            android:textColor="@color/message_view_header_color" />
+            <!--android:text="A"-->
+
+            <!--android:textAlignment="center"-->
+
+            <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+
+            <!--android:textColor="@color/message_view_header_color" />-->
 
 
 
