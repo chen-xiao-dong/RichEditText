@@ -90,6 +90,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
     }
     //Test to add a relativelayout programtically
     private void setupView(Context context, AttributeSet attrs, int defStyleAttr,int defStyleRes){
+        _context = context;
         RelativeLayout relativeLayout = new RelativeLayout(context);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT);
