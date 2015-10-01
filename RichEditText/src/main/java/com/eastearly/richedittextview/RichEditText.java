@@ -17,14 +17,21 @@ package com.eastearly.richedittextview;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
@@ -33,6 +40,8 @@ import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -57,27 +66,30 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
     private final static String Tag = "RichEditTextView";
     private EditText _editText;
     public RichEditText(Context context) {
-        super(context);
+        super(context, null);
+        setupView(context,null,0,0);
     }
 
     public RichEditText(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        _context = context;
-        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.RichEditText);
-        textColor = (a.getColor(R.styleable.RichEditText_text_color,Color.BLACK));
-        textContent = a.getString(R.styleable.RichEditText_text);
-        a.recycle();
-        //initView();
-        setupView(context,attrs,0);
+        super(context, attrs, 0);
+        setupView(context, attrs, 0, 0);
     }
 
-    public RichEditText(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
 
-        initView();
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public RichEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr, 0);
+        setupView(context, attrs, defStyleAttr, 0);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public RichEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes){
+        super(context,attrs,defStyleAttr,defStyleRes);
+        setupView(context,attrs,defStyleAttr,defStyleRes);
+
     }
     //Test to add a relativelayout programtically
-    private void setupView(Context context, AttributeSet attrs, int defStyleAttr){
+    private void setupView(Context context, AttributeSet attrs, int defStyleAttr,int defStyleRes){
         RelativeLayout relativeLayout = new RelativeLayout(context);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT);
@@ -111,27 +123,27 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
 
     }
 
-    private void initView(){
-        View view = inflate(getContext(), R.layout.richedittext, null);
-
-        mMessageContentView = (EditText)view.findViewById(R.id.body_text);
-        addView(view);
-        findViewById(R.id.makeBold).setOnClickListener(this);
-        findViewById(R.id.makeItalic).setOnClickListener(this);
-        findViewById(R.id.makeUnderline).setOnClickListener(this);
-        //findViewById(R.id.makeBackground).setOnClickListener(this);
-        findViewById(R.id.makeForeground).setOnClickListener(this);
-        findViewById(R.id.makeHyperlink).setOnClickListener(this);
-        mMessageContentView.setOnClickListener(this);
-        mMessageContentView.setTextColor(textColor);
-        mMessageContentView.setText(textContent);
-        mHtmloptions = (LinearLayout)findViewById(R.id.rich_toolbar);
-        mImageButton = (ImageButton)findViewById(R.id.list_toggle);
-        mImageButton.setOnClickListener(this);
-        setOnClickListener(this);
-
-
-    }
+//    private void initView(){
+//        View view = inflate(getContext(), R.layout.richedittext, null);
+//
+//        mMessageContentView = (EditText)view.findViewById(101);
+//        addView(view);
+//        findViewById(R.id.makeBold).setOnClickListener(this);
+//        findViewById(R.id.makeItalic).setOnClickListener(this);
+//        findViewById(R.id.makeUnderline).setOnClickListener(this);
+//        //findViewById(R.id.makeBackground).setOnClickListener(this);
+//        findViewById(R.id.makeForeground).setOnClickListener(this);
+//        findViewById(R.id.makeHyperlink).setOnClickListener(this);
+//        mMessageContentView.setOnClickListener(this);
+//        mMessageContentView.setTextColor(textColor);
+//        mMessageContentView.setText(textContent);
+//        mHtmloptions = (LinearLayout)findViewById(R.id.rich_toolbar);
+//        mImageButton = (ImageButton)findViewById(R.id.list_toggle);
+//        mImageButton.setOnClickListener(this);
+//        setOnClickListener(this);
+//
+//
+//    }
     @Override
     public void onClick(View view) {
 
@@ -147,7 +159,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
         final int end = mMessageContentView.getSelectionEnd();
 
         int viewId = view.getId();
-        if (viewId == R.id.body_text) {
+        if (viewId == mMessageContentView.getId()) {
             this.refreshHtmloptionBar();
         }
 
@@ -347,5 +359,60 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
         mMessageContentView.setSelection(end);
     }
 
+
+    public Editable getText() {
+        return mMessageContentView.getText();
+    }
+
+
+    public void setText(CharSequence text, TextView.BufferType type) {
+        mMessageContentView.setText(text,type);
+    }
+
+    /**
+     * Convenience for {@link Selection#setSelection(Spannable, int, int)}.
+     */
+    public void setSelection(int start, int stop) {
+        mMessageContentView.setSelection(start,stop);
+    }
+
+    /**
+     * Convenience for {@link Selection#setSelection(Spannable, int)}.
+     */
+    public void setSelection(int index) {
+        mMessageContentView.setSelection(index);
+    }
+
+    /**
+     * Convenience for {@link Selection#selectAll}.
+     */
+    public void selectAll() {
+        mMessageContentView.selectAll();
+    }
+
+    /**
+     * Convenience for {@link Selection#extendSelection}.
+     */
+    public void extendSelection(int index) {
+        mMessageContentView.extendSelection(index);
+    }
+
+    public void setEllipsize(TextUtils.TruncateAt ellipsis) {
+        mMessageContentView.setEllipsize(ellipsis);
+    }
+
+    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+        mMessageContentView.onInitializeAccessibilityEvent(event);
+    }
+
+    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+        mMessageContentView.onInitializeAccessibilityNodeInfo(info);
+    }
+
+
+    public boolean performAccessibilityAction(int action, Bundle arguments) {
+        return mMessageContentView.performAccessibilityAction(action,arguments);
+
+    }
 
 }

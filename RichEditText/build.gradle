@@ -18,17 +18,17 @@ ext {
     bintrayName = 'dach-richedit-android'
 
     publishedGroupId = 'com.earlyeast.android'
-    libraryName = 'dach-richedit'
-    artifact = 'richedit'
+    libraryName = 'dach-rich-edittext'
+    artifact = 'RichEditText'
 
     libraryDescription = ''
 
     siteUrl = 'https://github.com/eastearly/RichEditText'
     gitUrl = 'https://github.com/eastearly/RichEditText.git'
 
-    libraryVersion = '0.2.0'
+    libraryVersion = '0.2.2'
 
-    developerId = 'eastearly'
+    developerId = 'earlyeast'
     developerName = 'Chen Xiaodong'
     developerEmail = 'xiaodong666@gmail.com'
 
