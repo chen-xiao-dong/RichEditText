@@ -6,7 +6,7 @@ A rich edit text view on Android to replace native EditText view,it let user sho
 
 #### JCentor
 
-This project has been pushed to JCentor [here](https://bintray.com/xiaodong666/maven/dach-richedit-android/view#) ,in 'aar'.,to import the library in gradle:
+This project has been pushed to JCentor [here](https://bintray.com/xiaodong666/maven/dach-richedit-android/view#) ,in 'aar'.To import the library in gradle:
 
 `repositories {
      jcenter()

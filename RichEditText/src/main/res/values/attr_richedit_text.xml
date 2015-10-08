@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="RichEditTextView">
-        <attr name="text" format="string"/>
-        <attr name="text_color" format="color"/>
+    <declare-styleable name="RichEditText">
+        <attr name="richEditAble" format="boolean"/>
+
    </declare-styleable>
 </resources>

@@ -63,6 +63,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
     private ImageButton mImageButton;
     private SpannableStringBuilder mSS;
     private boolean mToolbarClosed = false;
+    private boolean mRichEditEnabled = true;
     private final static String Tag = "RichEditTextView";
     private EditText _editText;
     public RichEditText(Context context) {
@@ -98,53 +99,43 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
         EditText editText = new EditText(context,attrs);
 
         editText.setId(1001);
+        //
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RichEditText);
+        mRichEditEnabled = a.getBoolean(R.styleable.RichEditText_richEditAble,true);
+        a.recycle();
 
         View htmlOptions = inflate(context,R.layout.htmloptions,null);
         RelativeLayout.LayoutParams htmlOptionsLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
-        htmlOptionsLayoutParams.addRule(RelativeLayout.BELOW,1001);
-        htmlOptionsLayoutParams.setMargins(0,16,0,0);
+        htmlOptionsLayoutParams.addRule(RelativeLayout.BELOW, 1001);
+        htmlOptionsLayoutParams.setMargins(0, 16, 0, 0);
         htmlOptions.setLayoutParams(htmlOptionsLayoutParams);
         relativeLayout.setLayoutParams(params);
         relativeLayout.addView(editText);
-        relativeLayout.addView(htmlOptions);
+
+        if(mRichEditEnabled) {
+            relativeLayout.addView(htmlOptions);
+        }
         addView(relativeLayout);
 
         mMessageContentView = editText;
-        findViewById(R.id.makeBold).setOnClickListener(this);
-        findViewById(R.id.makeItalic).setOnClickListener(this);
-        findViewById(R.id.makeUnderline).setOnClickListener(this);
-        //findViewById(R.id.makeBackground).setOnClickListener(this);
-        findViewById(R.id.makeForeground).setOnClickListener(this);
-        findViewById(R.id.makeHyperlink).setOnClickListener(this);
+        if(mRichEditEnabled) {
+            findViewById(R.id.makeBold).setOnClickListener(this);
+            findViewById(R.id.makeItalic).setOnClickListener(this);
+            findViewById(R.id.makeUnderline).setOnClickListener(this);
+            //findViewById(R.id.makeBackground).setOnClickListener(this);
+            findViewById(R.id.makeForeground).setOnClickListener(this);
+            findViewById(R.id.makeHyperlink).setOnClickListener(this);
+
+            mHtmloptions = (LinearLayout) findViewById(R.id.rich_toolbar);
+            mImageButton = (ImageButton) findViewById(R.id.list_toggle);
+            mImageButton.setOnClickListener(this);
+        }
         mMessageContentView.setOnClickListener(this);
-        mHtmloptions = (LinearLayout)findViewById(R.id.rich_toolbar);
-        mImageButton = (ImageButton)findViewById(R.id.list_toggle);
-        mImageButton.setOnClickListener(this);
         setOnClickListener(this);
 
     }
 
-//    private void initView(){
-//        View view = inflate(getContext(), R.layout.richedittext, null);
-//
-//        mMessageContentView = (EditText)view.findViewById(101);
-//        addView(view);
-//        findViewById(R.id.makeBold).setOnClickListener(this);
-//        findViewById(R.id.makeItalic).setOnClickListener(this);
-//        findViewById(R.id.makeUnderline).setOnClickListener(this);
-//        //findViewById(R.id.makeBackground).setOnClickListener(this);
-//        findViewById(R.id.makeForeground).setOnClickListener(this);
-//        findViewById(R.id.makeHyperlink).setOnClickListener(this);
-//        mMessageContentView.setOnClickListener(this);
-//        mMessageContentView.setTextColor(textColor);
-//        mMessageContentView.setText(textContent);
-//        mHtmloptions = (LinearLayout)findViewById(R.id.rich_toolbar);
-//        mImageButton = (ImageButton)findViewById(R.id.list_toggle);
-//        mImageButton.setOnClickListener(this);
-//        setOnClickListener(this);
-//
-//
-//    }
+
     @Override
     public void onClick(View view) {
 
@@ -262,6 +253,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
         }
     }
     private void refreshHtmloptionBar() {
+        if(!mRichEditEnabled)return;
         int start = mMessageContentView.getSelectionStart();
         int end = mMessageContentView.getSelectionEnd();
         if (start == end && end == 0) return;
@@ -290,6 +282,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
 
     }
     private void getHtmloptionToolButton() {
+        if(!mRichEditEnabled) return;
         int start = mMessageContentView.getSelectionStart();
         int end = mMessageContentView.getSelectionEnd();
         if (start == end && end == 0) return;
