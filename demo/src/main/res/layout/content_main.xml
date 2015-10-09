@@ -15,7 +15,7 @@
         android:layout_height="wrap_content" />
     <com.eastearly.richedittextview.RichEditText
         android:layout_below="@+id/prompt_title"
-        android:layout_width="256dp"
+        android:layout_width="356dp"
         android:typeface="monospace"
         android:text="The quick brown fox jumped over the lazy fox."
         android:layout_height="match_parent"/>

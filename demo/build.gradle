@@ -1,8 +1,6 @@
 apply plugin: 'com.android.application'
 repositories {
-    maven {
-        url 'https://dl.bintray.com/xiaodong666/maven/'
-    }
+    jcenter()
 }
 android {
     compileSdkVersion 22
@@ -11,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.eastearly.richeditapp"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 20
         versionCode 1
         versionName "1.0"
     }
@@ -28,7 +26,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:design:22.2.1'
-    //releaseCompile 'com.earlyeast.android:richedittextview:0.1.0'
-    compile project(':RichEditText')
+    releaseCompile 'com.earlyeast.android:RichEditText:0.2.4'
+    debugCompile project(':RichEditText')
+    //compile project(':RichEditText')
 
 }

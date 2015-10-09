@@ -190,9 +190,9 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
             AbsoluteSizeSpan[] spans = mSS.getSpans(start, end, AbsoluteSizeSpan.class);
             float textSize;
             if (spans.length > 0) {
-                textSize = spans[0].getSize()+1;
+                textSize = spans[0].getSize()+10;
             } else {
-                textSize = mMessageContentView.getTextSize() + 1;
+                textSize = mMessageContentView.getTextSize() + 10;
             }
             span = new AbsoluteSizeSpan((int)textSize);
 
