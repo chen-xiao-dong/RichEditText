@@ -32,6 +32,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
@@ -54,7 +55,7 @@ import android.widget.TextView;
 /**
  * Created by dachen on 9/28/15.
  */
-public class RichEditText extends LinearLayout implements View.OnClickListener{
+public class RichEditText extends LinearLayout implements View.OnClickListener,IRichEditText{
 
     private final float initialAlpha = 0.7f;
     private Context _context;
@@ -128,6 +129,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
             findViewById(R.id.makeForeground).setOnClickListener(this);
             findViewById(R.id.makeHyperlink).setOnClickListener(this);
             findViewById(R.id.makeStrikethrough).setOnClickListener(this);
+            findViewById(R.id.makeScaleX).setOnClickListener(this);
             mHtmloptions = (LinearLayout) findViewById(R.id.rich_toolbar);
             mImageButton = (ImageButton) findViewById(R.id.list_toggle);
             mImageButton.setOnClickListener(this);
@@ -183,6 +185,18 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
                 span = new StrikethroughSpan();
             else
                 disableSpan(start, end, StrikethroughSpan.class);
+        }
+        else if(viewId == R.id.makeScaleX && start!=end){
+            AbsoluteSizeSpan[] spans = mSS.getSpans(start, end, AbsoluteSizeSpan.class);
+            float textSize;
+            if (spans.length > 0) {
+                textSize = spans[0].getSize()+1;
+            } else {
+                textSize = mMessageContentView.getTextSize() + 1;
+            }
+            span = new AbsoluteSizeSpan((int)textSize);
+
+
         }
         else if (viewId == R.id.makeForeground && start!=end) {
             new ColorPickerDialog(_context, new ColorPickerDialog.OnColorChangedListener() {
@@ -434,4 +448,11 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
 
     }
 
+    @Override
+    public String toHtml() {
+        if(mSS==null){
+            return null;
+        }
+        return EmailHtmlUtil.toHtml (mSS);
+    }
 }
