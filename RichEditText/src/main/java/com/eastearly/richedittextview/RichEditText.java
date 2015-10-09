@@ -32,8 +32,10 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
@@ -122,10 +124,10 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
             findViewById(R.id.makeBold).setOnClickListener(this);
             findViewById(R.id.makeItalic).setOnClickListener(this);
             findViewById(R.id.makeUnderline).setOnClickListener(this);
-            //findViewById(R.id.makeBackground).setOnClickListener(this);
+            findViewById(R.id.makeBackground).setOnClickListener(this);
             findViewById(R.id.makeForeground).setOnClickListener(this);
             findViewById(R.id.makeHyperlink).setOnClickListener(this);
-
+            findViewById(R.id.makeStrikethrough).setOnClickListener(this);
             mHtmloptions = (LinearLayout) findViewById(R.id.rich_toolbar);
             mImageButton = (ImageButton) findViewById(R.id.list_toggle);
             mImageButton.setOnClickListener(this);
@@ -175,7 +177,14 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
             else
                 disableSpan(start, end, UnderlineSpan.class);
 
-        } else if (viewId == R.id.makeForeground && start!=end) {
+        }
+        else if(viewId == R.id.makeStrikethrough){
+            if(toggleImageView((ImageView) view))
+                span = new StrikethroughSpan();
+            else
+                disableSpan(start, end, StrikethroughSpan.class);
+        }
+        else if (viewId == R.id.makeForeground && start!=end) {
             new ColorPickerDialog(_context, new ColorPickerDialog.OnColorChangedListener() {
                 @Override
                 public void colorChanged(int color) {
@@ -187,7 +196,20 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
 
             }, Color.BLACK).show();
 
-        } else if (viewId == R.id.makeHyperlink && start!= end) {
+        }
+        else if(viewId == R.id.makeBackground && start!=end){
+            new ColorPickerDialog(_context, new ColorPickerDialog.OnColorChangedListener () {
+                @Override
+                public void colorChanged(int color) {
+                    mSS.setSpan(new BackgroundColorSpan(color),
+                            start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    mMessageContentView.setText(mSS, TextView.BufferType.SPANNABLE);
+                    //MessageCompose.this.findViewById(R.id.makeBackground).setBackgroundColor(color);
+                }
+
+            }, Color.WHITE).show();
+        }
+        else if (viewId == R.id.makeHyperlink && start!= end) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(_context);
             final EditText urlText = new EditText(_context);
@@ -289,6 +311,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
         letImageViewOff((ImageView) findViewById(R.id.makeBold));
         letImageViewOff((ImageView) findViewById(R.id.makeItalic));
         letImageViewOff((ImageView) findViewById(R.id.makeUnderline));
+        letImageViewOff((ImageView) findViewById(R.id.makeStrikethrough));
         Object[] spans = mSS.getSpans(start, end, Object.class);
         for (Object span : spans) {
             ImageView iv = getHtmloptionToolButton(span);
@@ -309,6 +332,8 @@ public class RichEditText extends LinearLayout implements View.OnClickListener{
         } else if (span instanceof UnderlineSpan) {
             return (ImageView) findViewById(R.id.makeUnderline);
         }
+        else if(span instanceof StrikethroughSpan)
+            return (ImageView) findViewById(R.id.makeStrikethrough);
         return null;
     }
     private boolean toggleImageView(ImageView iv) {

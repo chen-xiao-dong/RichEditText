@@ -17,16 +17,39 @@
         <ImageView
 
             android:id="@+id/makeBold"
-
+            android:layout_marginRight="8dp"
             android:layout_width="24dp"
 
             android:layout_height="match_parent"
             android:alpha="0.7"
 
             android:src="@drawable/ic_bold" />
-
         <ImageView
+            android:layout_marginRight="8dp"
+            android:id="@+id/makeUnderline"
 
+            android:layout_width="24dp"
+
+            android:layout_height="match_parent"
+
+            android:alpha= "@string/initial_http_toggle_switcher_alpha"
+
+            android:src="@drawable/ic_underline"
+            />
+        <ImageView
+            android:layout_marginRight="8dp"
+            android:id="@+id/makeStrikethrough"
+
+            android:layout_width="24dp"
+
+            android:layout_height="match_parent"
+
+            android:alpha= "@string/initial_http_toggle_switcher_alpha"
+
+            android:src="@drawable/ic_strikethrough"
+            />
+        <ImageView
+            android:layout_marginRight="8dp"
             android:id="@+id/makeItalic"
 
             android:layout_width="24dp"
@@ -39,20 +62,26 @@
 
 
 
+
+
         <ImageView
-
-            android:id="@+id/makeUnderline"
-
+            android:layout_marginRight="8dp"
+            android:id="@+id/makeForeground"
             android:layout_width="24dp"
-
             android:layout_height="match_parent"
-
-            android:alpha= "@string/initial_http_toggle_switcher_alpha"
-
-            android:src="@drawable/ic_underline"
-            />
+            android:src="@drawable/ic_format_color_text_black_24dp"/>
+        <TextView
+            android:layout_marginRight="8dp"
+            android:id="@+id/makeBackground"
+            android:layout_width="24dp"
+            android:layout_height="match_parent"
+            android:background="@color/lightgray"
+            android:gravity="center_horizontal"
+            android:text="B"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
         <ImageView
-
+            android:layout_marginRight="8dp"
             android:id="@+id/makeHyperlink"
 
             android:layout_width="24dp"
@@ -60,11 +89,6 @@
             android:layout_height="match_parent"
 
             android:src="@drawable/ic_hyperlink" />
-        <ImageView
-            android:id="@+id/makeForeground"
-            android:layout_width="24dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_format_color_text_black_24dp"/>
         <!--<TextView-->
 
             <!--android:id="@+id/makeForeground"-->
