@@ -137,9 +137,8 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
         }
         this.mEditText.setOnClickListener(this);
         setOnClickListener(this);
-        if (mSS == null) {
-            mSS = new SpannableStringBuilder(mEditText.getText());
-        }
+        mSS = new SpannableStringBuilder(mEditText.getText());
+
     }
 
     @Override
@@ -147,7 +146,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
 
         //refresh tool bar status
         getHtmloptionToolButton();
-
+        mSS = new SpannableStringBuilder(mEditText.getText());
         final int start = mEditText.getSelectionStart();
         final int end = mEditText.getSelectionEnd();
 
