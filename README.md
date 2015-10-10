@@ -46,10 +46,13 @@ The buttons on toolbar shows styles of current text segment with grey/normal.For
 To edit font style,you need to select text first,then click relative icon to change its font style.For example,to make two words bold,first make the two words selected,
 then click 'bold' to set that,if they are changed un-bold,click the 'bold' again to make the whole selection part bold.
 
-### Demo screenshot
+### Demo
 
+ Demo 'demo2' is based on Android module template 'Blank Activity' on Android Studio,showing all features of this library.
  The screen shots showing like [addlink] (https://raw.githubusercontent.com/eastearly/RichEditText/master/raw/screen-shot/addlink.png) and [changefontcolor](https://raw.githubusercontent.com/eastearly/RichEditText/master/raw/screen-shot/changefontcolor.png).
 
+ 
+ 
 ### Bugs found
 
 1.When a segment was strike through,can not revoke by select the segment and click icon 'StrikeThrough',there is something not correct with the range logic.
