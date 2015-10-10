@@ -232,18 +232,7 @@ public class EmailHtmlUtil {
 					i = next;
 				}
 				if (style[j] instanceof AbsoluteSizeSpan) {
-                    int fontSize =  ((HtmlAbsoluteSizeSpan) style[j]).getHtmlFontSize();
-                    if(fontSize>HtmlAbsoluteSizeSpan.STANDARD_FONT_SIZE)
-                    {
-                        out.append("<big>");
-                    }
-                    else if(fontSize < HtmlAbsoluteSizeSpan.STANDARD_FONT_SIZE)
-                    {
-                        out.append("<small>");
-                    }
-                    out.append("<font size =\"");
-                    out.append(fontSize);
-                    out.append("\">");
+					out.append(String.format("<span style=\"font-size:%dpx;\">", ((AbsoluteSizeSpan) style[j]).getSize()/3));
 				}
 				if (style[j] instanceof ForegroundColorSpan) {
 					out.append("<font color =\"#");
@@ -278,17 +267,20 @@ public class EmailHtmlUtil {
 				if (style[j] instanceof ForegroundColorSpan) {
 					out.append("</font>");
 				}
+//				if (style[j] instanceof AbsoluteSizeSpan) {
+//					out.append("</font>");
+//                    int fontSize =  ((HtmlAbsoluteSizeSpan) style[j]).getHtmlFontSize();
+//                    if(fontSize>HtmlAbsoluteSizeSpan.STANDARD_FONT_SIZE)
+//                    {
+//                        out.append("</big>");
+//                    }
+//                    else if(fontSize < HtmlAbsoluteSizeSpan.STANDARD_FONT_SIZE)
+//                    {
+//                        out.append("</small>");
+//                    }
+//				}
 				if (style[j] instanceof AbsoluteSizeSpan) {
-					out.append("</font>");
-                    int fontSize =  ((HtmlAbsoluteSizeSpan) style[j]).getHtmlFontSize();
-                    if(fontSize>HtmlAbsoluteSizeSpan.STANDARD_FONT_SIZE)
-                    {
-                        out.append("</big>");
-                    }
-                    else if(fontSize < HtmlAbsoluteSizeSpan.STANDARD_FONT_SIZE)
-                    {
-                        out.append("</small>");
-                    }
+					out.append("</span>");
 				}
 				if (style[j] instanceof URLSpan) {
 					out.append("</a>");

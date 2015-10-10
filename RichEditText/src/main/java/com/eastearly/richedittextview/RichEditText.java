@@ -32,6 +32,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
@@ -55,20 +56,20 @@ import android.widget.TextView;
 /**
  * Created by dachen on 9/28/15.
  */
-public class RichEditText extends LinearLayout implements View.OnClickListener,IRichEditText{
+public class RichEditText extends LinearLayout implements View.OnClickListener,IRichEditText, IEditText {
 
     private final float initialAlpha = 0.7f;
     private Context _context;
     private String textContent;
     private int textColor;
-    private EditText mMessageContentView;
+    private EditText mEditText;
     private LinearLayout mHtmloptions;
     private ImageButton mImageButton;
     private SpannableStringBuilder mSS;
     private boolean mToolbarClosed = false;
     private boolean mRichEditEnabled = true;
     private final static String Tag = "RichEditTextView";
-    private EditText _editText;
+
     public RichEditText(Context context) {
         super(context, null);
         setupView(context,null,0,0);
@@ -120,7 +121,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
         }
         addView(relativeLayout);
 
-        mMessageContentView = editText;
+        this.mEditText = editText;
         if(mRichEditEnabled) {
             findViewById(R.id.makeBold).setOnClickListener(this);
             findViewById(R.id.makeItalic).setOnClickListener(this);
@@ -134,28 +135,24 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
             mImageButton = (ImageButton) findViewById(R.id.list_toggle);
             mImageButton.setOnClickListener(this);
         }
-        mMessageContentView.setOnClickListener(this);
+        this.mEditText.setOnClickListener(this);
         setOnClickListener(this);
-
+        if (mSS == null) {
+            mSS = new SpannableStringBuilder(mEditText.getText());
+        }
     }
-
 
     @Override
     public void onClick(View view) {
 
-        if (mSS == null) {
-            mSS = new SpannableStringBuilder(mMessageContentView.getText());
-        } else {
-            mSS = new SpannableStringBuilder(mMessageContentView.getText());
-        }
         //refresh tool bar status
         getHtmloptionToolButton();
 
-        final int start = mMessageContentView.getSelectionStart();
-        final int end = mMessageContentView.getSelectionEnd();
+        final int start = mEditText.getSelectionStart();
+        final int end = mEditText.getSelectionEnd();
 
         int viewId = view.getId();
-        if (viewId == mMessageContentView.getId()) {
+        if (viewId == mEditText.getId()) {
             this.refreshHtmloptionBar();
         }
 
@@ -190,9 +187,12 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
             AbsoluteSizeSpan[] spans = mSS.getSpans(start, end, AbsoluteSizeSpan.class);
             float textSize;
             if (spans.length > 0) {
-                textSize = spans[0].getSize()+10;
+                textSize = (float) (spans[spans.length-1].getSize() * 1.1);
             } else {
-                textSize = mMessageContentView.getTextSize() + 10;
+                textSize = (float) (mEditText.getTextSize() * 1.1);
+            }
+            for (AbsoluteSizeSpan spanItem : spans) {
+                mSS.removeSpan(spanItem);
             }
             span = new AbsoluteSizeSpan((int)textSize);
 
@@ -204,7 +204,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
                 public void colorChanged(int color) {
                     mSS.setSpan(new ForegroundColorSpan(color),
                             start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    mMessageContentView.setText(mSS, TextView.BufferType.SPANNABLE);
+                    mEditText.setText(mSS, TextView.BufferType.SPANNABLE);
                     //((TextView)MessageCompose.this.findViewById(R.id.makeForeground)).setTextColor(color);
                 }
 
@@ -217,7 +217,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
                 public void colorChanged(int color) {
                     mSS.setSpan(new BackgroundColorSpan(color),
                             start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    mMessageContentView.setText(mSS, TextView.BufferType.SPANNABLE);
+                    mEditText.setText(mSS, TextView.BufferType.SPANNABLE);
                     //MessageCompose.this.findViewById(R.id.makeBackground).setBackgroundColor(color);
                 }
 
@@ -237,7 +237,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
                                 String url = urlText.getText().toString();
                                 mSS.setSpan(new URLSpan(url),
                                         start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                                mMessageContentView.setText(mSS, TextView.BufferType.SPANNABLE);
+                                mEditText.setText(mSS, TextView.BufferType.SPANNABLE);
                             }
 
                         }
@@ -284,14 +284,14 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
                 mSS.setSpan(span, start, end, Spanned.SPAN_INCLUSIVE_INCLUSIVE);
             else
                 mSS.setSpan(span, start, end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
-            mMessageContentView.setText(mSS, TextView.BufferType.SPANNABLE);
-            mMessageContentView.setSelection(end);
+            mEditText.setText(mSS, TextView.BufferType.SPANNABLE);
+            mEditText.setSelection(end);
         }
     }
     private void refreshHtmloptionBar() {
         if(!mRichEditEnabled)return;
-        int start = mMessageContentView.getSelectionStart();
-        int end = mMessageContentView.getSelectionEnd();
+        int start = mEditText.getSelectionStart();
+        int end = mEditText.getSelectionEnd();
         if (start == end && end == 0) return;
         letImageViewOff((ImageView) findViewById(R.id.makeBold));
         letImageViewOff((ImageView) findViewById(R.id.makeItalic));
@@ -319,8 +319,8 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
     }
     private void getHtmloptionToolButton() {
         if(!mRichEditEnabled) return;
-        int start = mMessageContentView.getSelectionStart();
-        int end = mMessageContentView.getSelectionEnd();
+        int start = mEditText.getSelectionStart();
+        int end = mEditText.getSelectionEnd();
         if (start == end && end == 0) return;
         letImageViewOff((ImageView) findViewById(R.id.makeBold));
         letImageViewOff((ImageView) findViewById(R.id.makeItalic));
@@ -371,8 +371,8 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
                 }
                 //mSS.removeSpan(spans[i]);
             }
-        mMessageContentView.setText(mSS, TextView.BufferType.SPANNABLE);
-        mMessageContentView.setSelection(end);
+        mEditText.setText(mSS, TextView.BufferType.SPANNABLE);
+        mEditText.setSelection(end);
     }
 
     private void disableSpan(int start, int end, Class<? extends CharacterStyle> clz) {
@@ -388,67 +388,86 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
             }
             //mSS.removeSpan(spans[i]);
         }
-        mMessageContentView.setText(mSS, TextView.BufferType.SPANNABLE);
-        mMessageContentView.setSelection(end);
+        mEditText.setText(mSS, TextView.BufferType.SPANNABLE);
+        mEditText.setSelection(end);
     }
+
 
 
     public Editable getText() {
-        return mMessageContentView.getText();
+        return mEditText.getText();
     }
 
 
+
     public void setText(CharSequence text, TextView.BufferType type) {
-        mMessageContentView.setText(text,type);
+        mEditText.setText(text, type);
     }
 
     /**
      * Convenience for {@link Selection#setSelection(Spannable, int, int)}.
      */
+
     public void setSelection(int start, int stop) {
-        mMessageContentView.setSelection(start,stop);
+        mEditText.setSelection(start, stop);
     }
 
     /**
      * Convenience for {@link Selection#setSelection(Spannable, int)}.
      */
+
     public void setSelection(int index) {
-        mMessageContentView.setSelection(index);
+        mEditText.setSelection(index);
     }
 
     /**
      * Convenience for {@link Selection#selectAll}.
      */
+
     public void selectAll() {
-        mMessageContentView.selectAll();
+        mEditText.selectAll();
     }
 
     /**
      * Convenience for {@link Selection#extendSelection}.
      */
+
     public void extendSelection(int index) {
-        mMessageContentView.extendSelection(index);
+        mEditText.extendSelection(index);
     }
+
 
     public void setEllipsize(TextUtils.TruncateAt ellipsis) {
-        mMessageContentView.setEllipsize(ellipsis);
+        mEditText.setEllipsize(ellipsis);
     }
+
 
     public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
-        mMessageContentView.onInitializeAccessibilityEvent(event);
+        mEditText.onInitializeAccessibilityEvent(event);
     }
 
+
     public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
-        mMessageContentView.onInitializeAccessibilityNodeInfo(info);
+        mEditText.onInitializeAccessibilityNodeInfo(info);
     }
 
 
     public boolean performAccessibilityAction(int action, Bundle arguments) {
-        return mMessageContentView.performAccessibilityAction(action,arguments);
+        return mEditText.performAccessibilityAction(action,arguments);
 
     }
 
     @Override
+    public void addTextChangedListener(TextWatcher watcher) {
+        mEditText.addTextChangedListener(watcher);
+    }
+
+    @Override
+    public void removeTextChangedListener(TextWatcher watcher) {
+        mEditText.removeTextChangedListener(watcher);
+    }
+
+    //implements IRichEditText
     public String toHtml() {
         if(mSS==null){
             return null;

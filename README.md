@@ -21,7 +21,7 @@ This project has been pushed to JCentor [here](https://bintray.com/xiaodong666/m
 
  with specified version:
 
- `compile 'com.earlyeast.android:RichEditText:0.2.3'`
+ `compile 'com.earlyeast.android:RichEditText:0.3.0'`
 
 ### Supported Effects
 
@@ -34,6 +34,7 @@ At the time of this writing, here are all effects:
 - `URL`
 - `FOREGROUND` (font color)
 - `BACKGROUND`
+- `FONTSIZE`
 
 A folding-able toolbar is supplied to edit/switch the selection of text with different font styles.
 
