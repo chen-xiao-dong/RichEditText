@@ -94,11 +94,6 @@
 
             android:src="@drawable/ic_hyperlink" />
     </LinearLayout>
-    <ImageButton
-        android:id="@+id/list_toggle"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:background="@drawable/ic_keyboard_arrow_right_black_24dp"
-        android:gravity="center_vertical"/>
+
 
 </LinearLayout>

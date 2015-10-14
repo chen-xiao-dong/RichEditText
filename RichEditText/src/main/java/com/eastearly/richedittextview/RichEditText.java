@@ -42,10 +42,14 @@ import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -58,6 +62,8 @@ import android.widget.TextView;
  */
 public class RichEditText extends LinearLayout implements View.OnClickListener,IRichEditText, IEditText {
 
+    public static final int EDIT_TOGGLE_ID = 1002;
+    public static final int EDIT_TEXT_ID = 1001;
     private final float initialAlpha = 0.7f;
     private Context _context;
     private String textContent;
@@ -66,7 +72,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
     private LinearLayout mHtmloptions;
     private ImageButton mImageButton;
     private SpannableStringBuilder mSS;
-    private boolean mToolbarClosed = false;
+    private boolean mToolbarClosed = true;
     private boolean mRichEditEnabled = true;
     private final static String Tag = "RichEditTextView";
 
@@ -102,20 +108,35 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
 
         EditText editText = new EditText(context,attrs);
 
-        editText.setId(1001);
+        editText.setId(EDIT_TEXT_ID);
         //
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.RichEditText);
         mRichEditEnabled = a.getBoolean(R.styleable.RichEditText_richEditAble,true);
         a.recycle();
 
+        mImageButton = new ImageButton(context);
+        int px = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics());
+        RelativeLayout.LayoutParams editToggleParams = new RelativeLayout.LayoutParams(px,px);
+        mImageButton.setBackground(getResources().getDrawable(R.drawable.ic_keyboard_arrow_left_black_24dp));
+        editToggleParams.addRule(RelativeLayout.ALIGN_BOTTOM, EDIT_TEXT_ID);
+        editToggleParams.addRule(RelativeLayout.ALIGN_RIGHT, EDIT_TEXT_ID);
+        mImageButton.setLayoutParams(editToggleParams);
+        mImageButton.setId(EDIT_TOGGLE_ID);
+        mImageButton.setRotation(-90);
+        mImageButton.setOnClickListener(this);
+
         View htmlOptions = inflate(context,R.layout.htmloptions,null);
+
         RelativeLayout.LayoutParams htmlOptionsLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
         htmlOptionsLayoutParams.addRule(RelativeLayout.BELOW, 1001);
+        htmlOptionsLayoutParams.addRule(RelativeLayout.ALIGN_RIGHT, 1001);
         htmlOptionsLayoutParams.setMargins(0, 16, 0, 0);
         htmlOptions.setLayoutParams(htmlOptionsLayoutParams);
         relativeLayout.setLayoutParams(params);
         relativeLayout.addView(editText);
+        relativeLayout.addView(mImageButton);
 
+        //htmlOptions.setVisibility(View.GONE);
         if(mRichEditEnabled) {
             relativeLayout.addView(htmlOptions);
         }
@@ -132,8 +153,9 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
             findViewById(R.id.makeStrikethrough).setOnClickListener(this);
             findViewById(R.id.makeScaleX).setOnClickListener(this);
             mHtmloptions = (LinearLayout) findViewById(R.id.rich_toolbar);
-            mImageButton = (ImageButton) findViewById(R.id.list_toggle);
-            mImageButton.setOnClickListener(this);
+            mHtmloptions.setVisibility(View.GONE);
+//            mImageButton = (ImageButton) findViewById(R.id.list_toggle);
+//            mImageButton.setOnClickListener(this);
         }
         this.mEditText.setOnClickListener(this);
         setOnClickListener(this);
@@ -249,32 +271,36 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
             builder.create().show();
 
         }
-        else if( viewId == R.id.list_toggle){
+        else if( viewId == EDIT_TOGGLE_ID){
             if(!mToolbarClosed){
                 mToolbarClosed = !mToolbarClosed;
-                mImageButton.setBackground(getResources().getDrawable(R.drawable.ic_keyboard_arrow_left_black_24dp));
-                AnimatorSet set = new AnimatorSet();
-                set.playTogether(
-                        ObjectAnimator.ofFloat(mHtmloptions, "translationX", mHtmloptions.getMeasuredWidth()),
-                        ObjectAnimator.ofFloat(mHtmloptions, "alpha", 1, 0)
-                );
-                set.start();
+                mImageButton.setRotation(90);
+                //mImageButton.setBackground(getResources().getDrawable(R.drawable.ic_keyboard_arrow_left_black_24dp));
+//                AnimatorSet set = new AnimatorSet();
+//                set.playTogether(
+//                        ObjectAnimator.ofFloat(mHtmloptions, "translationX", mHtmloptions.getMeasuredWidth()),
+//                        ObjectAnimator.ofFloat(mHtmloptions, "alpha", 1, 0)
+//                );
+//                set.start();
 
-
+                mHtmloptions.setVisibility(View.GONE);
+                //requestLayout();
 
             }
 
             else
             {
                 mToolbarClosed = !mToolbarClosed;
-                mImageButton.setBackground(getResources().getDrawable(R.drawable.ic_keyboard_arrow_right_black_24dp));
-                ObjectAnimator objectAnimator = new ObjectAnimator();
-                AnimatorSet set = new AnimatorSet();
-                set.playTogether(
-                        ObjectAnimator.ofFloat(mHtmloptions, "translationX", 0),
-                        ObjectAnimator.ofFloat(mHtmloptions, "alpha", 0, 1)
-                );
-                set.start();
+                mHtmloptions.setVisibility(View.VISIBLE);
+                //requestLayout();
+                mImageButton.setRotation(-90);
+//                ObjectAnimator objectAnimator = new ObjectAnimator();
+//                AnimatorSet set = new AnimatorSet();
+//                set.playTogether(
+//                        ObjectAnimator.ofFloat(mHtmloptions, "translationX", 0),
+//                        ObjectAnimator.ofFloat(mHtmloptions, "alpha", 0, 1)
+//                );
+//                set.start();
             }
         }
         if (span != null) {
