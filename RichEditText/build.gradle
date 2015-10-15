@@ -26,7 +26,7 @@ ext {
     siteUrl = 'https://github.com/eastearly/RichEditText'
     gitUrl = 'https://github.com/eastearly/RichEditText.git'
 
-    libraryVersion = '0.3.0'
+    libraryVersion = '0.6.0'
 
     developerId = 'earlyeast'
     developerName = 'Chen Xiaodong'
