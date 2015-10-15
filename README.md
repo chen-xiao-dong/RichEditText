@@ -50,6 +50,8 @@ then click 'bold' to set that, if they are changed un-bold, click the 'bold' aga
 
  Demo 'demo2' is based on Android module template 'Blank Activity' on Android Studio,showing all features of this library.
  The screen shots showing like [addlink] (https://raw.githubusercontent.com/eastearly/RichEditText/master/raw/screen-shot/addlink.png) and [changefontcolor](https://raw.githubusercontent.com/eastearly/RichEditText/master/raw/screen-shot/changefontcolor.png).
+ 
+ ![demo](https://raw.githubusercontent.com/eastearly/RichEditText/master/raw/screen-shot/addlink.png) 
 
  
  
