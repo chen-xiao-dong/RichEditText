@@ -42,6 +42,7 @@ import android.text.style.StyleSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +65,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
 
     public static final int EDIT_TOGGLE_ID = 1002;
     public static final int EDIT_TEXT_ID = 1001;
+    private static final String TAG = "RichEditText";
     private final float initialAlpha = 0.7f;
     private Context _context;
     private String textContent;
@@ -128,9 +130,10 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
         View htmlOptions = inflate(context,R.layout.htmloptions,null);
 
         RelativeLayout.LayoutParams htmlOptionsLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+
         htmlOptionsLayoutParams.addRule(RelativeLayout.BELOW, 1001);
         htmlOptionsLayoutParams.addRule(RelativeLayout.ALIGN_RIGHT, 1001);
-        htmlOptionsLayoutParams.setMargins(0, 16, 0, 0);
+
         htmlOptions.setLayoutParams(htmlOptionsLayoutParams);
         relativeLayout.setLayoutParams(params);
         relativeLayout.addView(editText);
@@ -162,7 +165,6 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
         mSS = new SpannableStringBuilder(mEditText.getText());
 
     }
-
     @Override
     public void onClick(View view) {
 
@@ -274,7 +276,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
         else if( viewId == EDIT_TOGGLE_ID){
             if(!mToolbarClosed){
                 mToolbarClosed = !mToolbarClosed;
-                mImageButton.setRotation(90);
+                mImageButton.setRotation(-90);
                 //mImageButton.setBackground(getResources().getDrawable(R.drawable.ic_keyboard_arrow_left_black_24dp));
 //                AnimatorSet set = new AnimatorSet();
 //                set.playTogether(
@@ -293,7 +295,7 @@ public class RichEditText extends LinearLayout implements View.OnClickListener,I
                 mToolbarClosed = !mToolbarClosed;
                 mHtmloptions.setVisibility(View.VISIBLE);
                 //requestLayout();
-                mImageButton.setRotation(-90);
+                mImageButton.setRotation(90);
 //                ObjectAnimator objectAnimator = new ObjectAnimator();
 //                AnimatorSet set = new AnimatorSet();
 //                set.playTogether(
